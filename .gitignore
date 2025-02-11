@@ -1,0 +1,15 @@
+# Ignore environment variables and API keys
+.env
+
+# Ignore Python cache and virtual environments
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Ignore IDE/editor files
+.idea/
+.vscode/
+
+# Ignore log files
+*.log
