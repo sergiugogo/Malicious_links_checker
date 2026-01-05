@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: link-checker
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: VIRUSTOTAL_API_KEY
+        sync: false
+      - key: GOOGLE_SAFEBROWSING_API_KEY
+        sync: false
+      - key: URLSCAN_API_KEY
+        sync: false
