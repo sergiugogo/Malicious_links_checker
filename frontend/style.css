@@ -225,6 +225,22 @@ button:disabled {
     color: #ffc107;
 }
 
+/* Screenshot section */
+.screenshot-section {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0, 255, 204, 0.3);
+}
+
+.screenshot {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 8px;
+    margin-top: 10px;
+    border: 2px solid rgba(0, 255, 204, 0.4);
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+}
+
 /* Glitch effect */
 @keyframes glitch {
     0% {

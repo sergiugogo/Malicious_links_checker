@@ -76,18 +76,133 @@ def check_virustotal(api_key, url):
 
 
 
+def check_google_safebrowsing(api_key, url):
+    """Checks the URL using Google Safe Browsing API v4."""
+    gsb_url = f"https://safebrowsing.googleapis.com/v4/threatMatches:find?key={api_key}"
+    
+    payload = {
+        "client": {
+            "clientId": "malicious-link-checker",
+            "clientVersion": "1.0.0"
+        },
+        "threatInfo": {
+            "threatTypes": [
+                "MALWARE",
+                "SOCIAL_ENGINEERING",
+                "UNWANTED_SOFTWARE",
+                "POTENTIALLY_HARMFUL_APPLICATION"
+            ],
+            "platformTypes": ["ANY_PLATFORM"],
+            "threatEntryTypes": ["URL"],
+            "threatEntries": [{"url": url}]
+        }
+    }
+    
+    try:
+        response = requests.post(gsb_url, json=payload, timeout=10)
+        
+        if response.status_code == 200:
+            result = response.json()
+            # Empty response means URL is safe
+            if not result or "matches" not in result:
+                return {
+                    "is_malicious": False,
+                    "threats": []
+                }
+            
+            # URL is flagged - extract threat types
+            threats = []
+            for match in result.get("matches", []):
+                threat_type = match.get("threatType", "UNKNOWN")
+                if threat_type not in threats:
+                    threats.append(threat_type)
+            
+            return {
+                "is_malicious": True,
+                "threats": threats
+            }
+        else:
+            print(f"Google Safe Browsing API error: {response.status_code}")
+            return {"is_malicious": False, "error": f"API error: {response.status_code}"}
+    except Exception as e:
+        print(f"Error in Google Safe Browsing check: {e}")
+        return {"is_malicious": False, "error": str(e)}
+
+def check_urlscan(api_key, url):
+    """Checks the URL using URLScan.io API."""
+    submit_url = "https://urlscan.io/api/v1/scan/"
+    headers = {"API-Key": api_key, "Content-Type": "application/json"}
+    payload = {"url": url, "visibility": "public"}
+
+    try:
+        # Step 1: Submit the URL for scanning
+        response = requests.post(submit_url, headers=headers, json=payload, timeout=10)
+        
+        if response.status_code == 200:
+            uuid = response.json()["uuid"]
+            
+            # Step 2: Poll for results (scan takes 10-30 seconds)
+            result_url = f"https://urlscan.io/api/v1/result/{uuid}/"
+            
+            for _ in range(6):  # Try 6 times with 5 second intervals
+                time.sleep(5)
+                result_response = requests.get(result_url, timeout=10)
+                
+                if result_response.status_code == 200:
+                    result = result_response.json()
+                    
+                    # Extract verdicts from the response
+                    verdicts = result.get("verdicts", {}).get("overall", {})
+                    
+                    return {
+                        "is_malicious": verdicts.get("malicious", False),
+                        "score": verdicts.get("score", 0),
+                        "screenshot_url": result.get("task", {}).get("screenshotURL", "")
+                    }
+                
+                # Status 404 means still processing, keep waiting
+            
+            # Timeout waiting for results
+            return {"is_malicious": False, "error": "Scan timeout"}
+        elif response.status_code == 400:
+            # URL may be blocked from scanning (popular domains like github.com)
+            error_data = response.json()
+            message = error_data.get("message", "Scan blocked")
+            print(f"URLScan blocked: {message}")
+            return {"is_malicious": False, "error": "Domain blocked from scanning", "skipped": True}
+        else:
+            print(f"URLScan API error: {response.status_code}")
+            return {"is_malicious": False, "error": f"API error: {response.status_code}"}
+    except Exception as e:
+        print(f"Error in URLScan check: {e}")
+        return {"is_malicious": False, "error": str(e)}
+
 
 
 def check_url(url):
-    """Check URL using VirusTotal API."""
+    """Check URL using multiple security APIs."""
     vt_api_key = os.getenv("VIRUSTOTAL_API_KEY")
+    gsb_api_key = os.getenv("GOOGLE_SAFEBROWSING_API_KEY")
+    urlscan_api_key = os.getenv("URLSCAN_API_KEY")
+    
     vt_result = check_virustotal(vt_api_key, url)
+    gsb_result = check_google_safebrowsing(gsb_api_key, url)
+    urlscan_result = check_urlscan(urlscan_api_key, url)
+    
+    # URL is malicious if any API flags it
+    is_malicious = (
+        vt_result.get("is_malicious", False) or 
+        gsb_result.get("is_malicious", False) or
+        urlscan_result.get("is_malicious", False)
+    )
 
     return {
         "url": url,
-        "is_malicious": vt_result.get("is_malicious", False),
+        "is_malicious": is_malicious,
         "detailed_results": {
-            "VirusTotal": vt_result
+            "VirusTotal": vt_result,
+            "GoogleSafeBrowsing": gsb_result,
+            "URLScan": urlscan_result
         }
     }
 
