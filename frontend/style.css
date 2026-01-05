@@ -70,6 +70,9 @@ button {
     border-radius: 8px;
     color: white;
     font-size: 18px;
+    border-radius: 8px;
+    color: white;
+    font-size: 18px;
     cursor: pointer;
     transition: all 0.3s ease;
     text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
@@ -106,7 +109,9 @@ button:disabled {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* Result box */
@@ -123,8 +128,15 @@ button:disabled {
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
 }
 
 .error {
@@ -142,8 +154,15 @@ button:disabled {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .result-card.safe {
@@ -211,6 +230,7 @@ button:disabled {
     0% {
         text-shadow: -3px 0px 5px rgba(0, 255, 204, 0.7), 3px 0px 5px rgba(255, 0, 93, 0.7);
     }
+
     100% {
         text-shadow: 3px 0px 5px rgba(0, 255, 204, 0.7), -3px 0px 5px rgba(255, 0, 93, 0.7);
     }
@@ -221,11 +241,109 @@ button:disabled {
     .container {
         padding: 20px 15px;
     }
-    
+
     h1 {
         font-size: 22px;
     }
-    
+
+    button {
+        width: 100%;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.result-card.safe {
+    background: rgba(0, 255, 136, 0.15);
+    border: 1px solid rgba(0, 255, 136, 0.5);
+}
+
+.result-card.malicious {
+    background: rgba(255, 64, 129, 0.15);
+    border: 1px solid rgba(255, 64, 129, 0.5);
+}
+
+.result-card .status {
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.result-card.safe .status {
+    color: #00ff88;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.7);
+}
+
+.result-card.malicious .status {
+    color: #ff4081;
+    text-shadow: 0 0 10px rgba(255, 64, 129, 0.7);
+}
+
+.result-card .url {
+    word-break: break-all;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+}
+
+.details ul {
+    list-style: none;
+    margin-top: 10px;
+}
+
+.details li {
+    padding: 8px 12px;
+    margin: 5px 0;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.details li.clean {
+    background: rgba(0, 255, 136, 0.2);
+    color: #00ff88;
+}
+
+.details li.flagged {
+    background: rgba(255, 64, 129, 0.2);
+    color: #ff4081;
+}
+
+.details li.service-error {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+}
+
+/* Glitch effect */
+@keyframes glitch {
+    0% {
+        text-shadow: -3px 0px 5px rgba(0, 255, 204, 0.7), 3px 0px 5px rgba(255, 0, 93, 0.7);
+    }
+
+    100% {
+        text-shadow: 3px 0px 5px rgba(0, 255, 204, 0.7), -3px 0px 5px rgba(255, 0, 93, 0.7);
+    }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .container {
+        padding: 20px 15px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
     button {
         width: 100%;
     }
