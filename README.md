@@ -138,5 +138,3 @@ This project was inspired by the need to protect against phishing attacks and is
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 ```
-
-Simply save this content as `README.md` in your repository’s root directory. Adjust the repository URL, API keys, and any other details to fit your specific project setup.
