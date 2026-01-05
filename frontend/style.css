@@ -1,4 +1,4 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -9,7 +9,7 @@ body {
     text-align: center;
     background: #0d1117;
     color: #00ffcc;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -17,7 +17,8 @@ body {
 }
 
 .container {
-    max-width: 500px;
+    max-width: 550px;
+    width: 100%;
     padding: 30px;
     background: rgba(0, 255, 204, 0.1);
     border-radius: 12px;
@@ -27,7 +28,7 @@ body {
     text-shadow: 0px 0px 5px rgba(0, 255, 204, 0.7);
 }
 
-/*Title*/
+/* Title */
 h1 {
     font-size: 28px;
     margin-bottom: 20px;
@@ -36,7 +37,7 @@ h1 {
     animation: glitch 1s infinite alternate;
 }
 
-/* neon effect on the input field*/
+/* Neon effect on the input field */
 input {
     width: 100%;
     padding: 12px;
@@ -56,9 +57,13 @@ input:focus {
     box-shadow: 0px 0px 12px rgba(255, 64, 129, 0.6);
 }
 
-/*Buttton effect*/
+input::placeholder {
+    color: rgba(0, 255, 204, 0.5);
+}
+
+/* Button */
 button {
-    padding: 12px 20px;
+    padding: 12px 24px;
     margin-top: 20px;
     background: #ff4081;
     border: none;
@@ -69,31 +74,159 @@ button {
     transition: all 0.3s ease;
     text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
     box-shadow: 0px 0px 12px rgba(255, 64, 129, 0.8);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 150px;
 }
 
-button:hover {
+button:hover:not(:disabled) {
     background: #ff005d;
     box-shadow: 0px 0px 20px rgba(255, 0, 93, 0.9);
 }
 
-/*this is for the result box*/
-#result {
-    margin-top: 20px;
-    font-size: 1.2em;
-    font-weight: bold;
-    padding: 15px;
-    background: rgba(0, 255, 204, 0.2);
-    border-radius: 8px;
-    box-shadow: 0px 0px 8px rgba(0, 255, 204, 0.6);
-    text-shadow: 0px 0px 3px rgba(0, 255, 204, 0.7);
+button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
 }
 
-/* glitch effect */
+/* Spinner */
+.spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Result box */
+#result {
+    margin-top: 20px;
+    font-size: 1em;
+    text-align: left;
+}
+
+.loading {
+    text-align: center;
+    color: #00ffcc;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.error {
+    color: #ff4081;
+    background: rgba(255, 64, 129, 0.2);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.result-card {
+    padding: 20px;
+    border-radius: 8px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.result-card.safe {
+    background: rgba(0, 255, 136, 0.15);
+    border: 1px solid rgba(0, 255, 136, 0.5);
+}
+
+.result-card.malicious {
+    background: rgba(255, 64, 129, 0.15);
+    border: 1px solid rgba(255, 64, 129, 0.5);
+}
+
+.result-card .status {
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.result-card.safe .status {
+    color: #00ff88;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.7);
+}
+
+.result-card.malicious .status {
+    color: #ff4081;
+    text-shadow: 0 0 10px rgba(255, 64, 129, 0.7);
+}
+
+.result-card .url {
+    word-break: break-all;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+}
+
+.details ul {
+    list-style: none;
+    margin-top: 10px;
+}
+
+.details li {
+    padding: 8px 12px;
+    margin: 5px 0;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.details li.clean {
+    background: rgba(0, 255, 136, 0.2);
+    color: #00ff88;
+}
+
+.details li.flagged {
+    background: rgba(255, 64, 129, 0.2);
+    color: #ff4081;
+}
+
+.details li.service-error {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+}
+
+/* Glitch effect */
 @keyframes glitch {
     0% {
         text-shadow: -3px 0px 5px rgba(0, 255, 204, 0.7), 3px 0px 5px rgba(255, 0, 93, 0.7);
     }
     100% {
         text-shadow: 3px 0px 5px rgba(0, 255, 204, 0.7), -3px 0px 5px rgba(255, 0, 93, 0.7);
+    }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .container {
+        padding: 20px 15px;
+    }
+    
+    h1 {
+        font-size: 22px;
+    }
+    
+    button {
+        width: 100%;
     }
 }

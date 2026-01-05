@@ -3,15 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link Checker</title>
+    <meta name="description" content="Check if a URL is malicious using multiple security APIs">
+    <title>Link Checker - Malicious URL Scanner</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h1>Link Checker</h1>
         <form id="url-form">
-            <input type="text" id="url-input" placeholder="Enter a URL" required>
-            <button type="submit">Check URL</button>
+            <input type="url" id="url-input" placeholder="Enter a URL (e.g., https://example.com)" required>
+            <button type="submit" id="submit-btn">
+                <span class="btn-text">Check URL</span>
+                <span class="spinner hidden"></span>
+            </button>
         </form>
         <div id="result"></div>
     </div>
