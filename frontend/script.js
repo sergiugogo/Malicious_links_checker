@@ -14,8 +14,8 @@ document.getElementById('url-form').addEventListener('submit', async function (e
     resultDiv.innerHTML = '<p class="loading">Scanning URL with security APIs...</p>';
 
     try {
-        // Use relative URL - works with Docker reverse proxy
-        const response = await fetch('/api/check_url', {
+        // Use relative URL - works with Flask serving both frontend and API
+        const response = await fetch('/check_url', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ url: urlInput.value })

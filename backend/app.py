@@ -1,11 +1,14 @@
 import requests
 import time
 import re
-from flask import Flask, request, jsonify
-from flask_cors import CORS
 import os
+from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
 from dotenv import load_dotenv
 from urllib.parse import urlparse
+
+# Frontend folder path (relative to where app.py runs)
+FRONTEND_DIR = os.path.join(os.path.dirname(__file__), 'frontend')
 
 app = Flask(__name__)
 CORS(app)
@@ -209,7 +212,18 @@ def check_url(url):
 
 @app.route('/')
 def home():
-    return "Welcome to the Link Checker API! Use the `/check_url` endpoint to check if a URL is malicious."
+    """Serve the frontend."""
+    return send_from_directory(FRONTEND_DIR, 'index.html')
+
+
+@app.route('/style.css')
+def serve_css():
+    return send_from_directory(FRONTEND_DIR, 'style.css')
+
+
+@app.route('/script.js')
+def serve_js():
+    return send_from_directory(FRONTEND_DIR, 'script.js')
 
 
 @app.route('/favicon.ico')
